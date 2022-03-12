@@ -1,4 +1,4 @@
-import React, { Component, useCallback, useEffect, useState } from 'react';
+import React, { Component, useCallback, useEffect, useMemo, useState } from 'react';
 import { Dimensions, Modal, ScrollView, StyleSheet, TouchableOpacity, View, Platform, Text, TextInput } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -14,6 +14,8 @@ export default function Dropdown(props) {
     let data = props.data;
     let onChange = props.onChange;
     let newTheme = props.theme;
+    let renderDisplay = props.renderDisplay;
+    let showSearchBar = props.showSearchBar ?? false;
 
     const [isShowPicker, setShowPicker] = useState(false);
     const [search, setSearch] = useState('');
@@ -33,8 +35,16 @@ export default function Dropdown(props) {
     }, [selectedValue]);
 
     useEffect(() => {
-        setFilteredData(data);
-    }, [data]);
+        let _data = [...data];
+
+        //search data by keyword
+        let result = _data.filter(item => {
+            if (getLabel(item).toLowerCase().indexOf(search.toLowerCase()) > -1) {
+                return item;
+            }
+        });
+        setFilteredData(result);
+    }, [data, search]);
 
     const chooseByValue = useCallback((newValue) => {
         if (data && data.length > 0) {
@@ -61,26 +71,8 @@ export default function Dropdown(props) {
         setShowPicker(true);
     }, []);
 
-    return (
-        <View style={[styles.container, theme.containerStyle]}>
-            {props.label != null && (
-                <Text style={[styles.label, theme.labelStyle]}>{props.label}</Text>
-            )}
-
-            {/* {(props.error != "" && props.error != null) && (
-                <Text style={styles.errorText}>{props.error}</Text>
-            )} */}
-            <TouchableOpacity onPress={openPicker}
-                activeOpacity={0.7}
-                style={[styles.pickerWrapper, theme.boxStyle]}>
-                <Text style={[styles.textContent, theme.textContentStyle]}>{selectedItem ? selectedItem.label : '(Please Select)'}</Text>
-                <MaterialCommunityIcons
-                    name="chevron-down"
-                    size={20}
-                    style={[styles.rightIcon, theme.rightIconStyle]}
-                />
-            </TouchableOpacity>
-
+    const modalContent = useMemo(() => {
+        return (
             <Modal
                 animationType="fade"
                 transparent={true}
@@ -91,24 +83,26 @@ export default function Dropdown(props) {
                     activeOpacity={1}
                     style={[styles.modalRoot, theme.modalRootStyle]}>
                     <View style={[styles.modalContent, theme.modalContentStyle]}>
-                        <View style={[styles.searchBarStyle, theme.searchWrapperStyle]}>
-                            <MaterialIcons
-                                name='search'
-                                size={24}
-                                style={[styles.searchIcon, theme.searchIconStyle]}
-                            />
-                            <View style={{ flex: 1, justifyContent: 'center' }}>
-                                <TextInput
-                                    onChangeText={(term) => {
-                                        setSearch(term);
-                                    }}
-                                    value={search}
-                                    style={[styles.searchInput, theme.searchInputStyle]}
-                                    placeholder={"Search "}
-                                    placeholderTextColor={props.placeholderTextColor}
+                        {showSearchBar == true && (
+                            <View style={[styles.searchBarStyle, theme.searchWrapperStyle]}>
+                                <MaterialIcons
+                                    name='search'
+                                    size={24}
+                                    style={[styles.searchIcon, theme.searchIconStyle]}
                                 />
+                                <View style={{ flex: 1, justifyContent: 'center' }}>
+                                    <TextInput
+                                        onChangeText={(term) => {
+                                            setSearch(term);
+                                        }}
+                                        value={search}
+                                        style={[styles.searchInput, theme.searchInputStyle]}
+                                        placeholder={"Search "}
+                                        placeholderTextColor={props.placeholderTextColor}
+                                    />
+                                </View>
                             </View>
-                        </View>
+                        )}
                         <ScrollView
                             showsHorizontalScrollIndicator={false}
                             showsVerticalScrollIndicator={false}
@@ -139,6 +133,42 @@ export default function Dropdown(props) {
                     </View>
                 </TouchableOpacity>
             </Modal>
+        );
+    }, [isShowPicker, theme, search, filteredData, onChange, getValue, getLabel]);
+
+    if (renderDisplay != null) {
+        return (
+            <>
+                <TouchableOpacity onPress={openPicker} activeOpacity={0.8}>
+                    {renderDisplay()}
+                </TouchableOpacity>
+
+                {modalContent}
+            </>
+        );
+    }
+
+    return (
+        <View style={[styles.container, theme.containerStyle]}>
+            {props.label != null && (
+                <Text style={[styles.label, theme.labelStyle]}>{props.label}</Text>
+            )}
+
+            {/* {(props.error != "" && props.error != null) && (
+                <Text style={styles.errorText}>{props.error}</Text>
+            )} */}
+            <TouchableOpacity onPress={openPicker}
+                activeOpacity={0.7}
+                style={[styles.pickerWrapper, theme.boxStyle]}>
+                <Text style={[styles.textContent, theme.textContentStyle]}>{selectedItem ? selectedItem.label : '(Please Select)'}</Text>
+                <MaterialCommunityIcons
+                    name="chevron-down"
+                    size={20}
+                    style={[styles.rightIcon, theme.rightIconStyle]}
+                />
+            </TouchableOpacity>
+
+            {modalContent}
         </View>
     );
 }

@@ -110,5 +110,7 @@ Prop | Type | Description
 value | string/number | This is mandatory for selecting the default value
 data | array of object with `id` and `label` attribute | Used as array of source data
 onChange | function | This event will be triggered after user click the list item
+renderDisplay | function | Use this function to custom render your dropdown
+showSearchBar | boolean | Use this to show search bar (default false)
 theme | `Object` | This is if you want to customize the appearance
 placeholderTextColor | string color | This is if you want to customize the placeholderTextColor props in TextInput
