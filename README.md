@@ -1,6 +1,8 @@
 # @febfeb/react-native-dropdown
 A single pure component for drop-down/combobox in react native
 
+![react-native-dropdown](https://raw.githubusercontent.com/febfeb/react-native-dropdown/main/image.gif)
+
 ## Requirement
 
 Please install [react-native-vector-icons](https://github.com/oblador/react-native-vector-icons)
