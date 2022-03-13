@@ -1,6 +1,10 @@
 # @febfeb/react-native-dropdown
 A single pure component for drop-down/combobox in react native
 
+## Requirement
+
+Please install [react-native-vector-icons](https://github.com/oblador/react-native-vector-icons)
+
 ## Instalation
 
 ```
@@ -22,6 +26,7 @@ const [fruit, setFruit] = useState(1);
 
 return (
     <Dropdown
+        label='Select fruit'
         value={fruit}
         data={fruits}
         onChange={(val) => {
@@ -109,6 +114,7 @@ Prop | Type | Description
 --- | --- | ---
 value | string/number | This is mandatory for selecting the default value
 data | array of object with `id` and `label` attribute | Used as array of source data
+label | string | Title
 onChange | function | This event will be triggered after user click the list item
 renderDisplay | function | Use this function to custom render your dropdown
 showSearchBar | boolean | Use this to show search bar (default false)
