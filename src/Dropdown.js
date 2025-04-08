@@ -16,6 +16,10 @@ export default function Dropdown(props) {
     let newTheme = props.theme;
     let renderDisplay = props.renderDisplay;
     let showSearchBar = props.showSearchBar ?? false;
+    let placeholderText = '(Please Select)';
+    if (props.placeholder !== undefined) {
+        placeholderText = props.placeholder;        
+    }
 
     const [isShowPicker, setShowPicker] = useState(false);
     const [search, setSearch] = useState('');
@@ -160,7 +164,7 @@ export default function Dropdown(props) {
             <TouchableOpacity onPress={openPicker}
                 activeOpacity={0.7}
                 style={[styles.pickerWrapper, theme.boxStyle]}>
-                <Text style={[styles.textContent, theme.textContentStyle]}>{selectedItem ? selectedItem.label : '(Please Select)'}</Text>
+                <Text style={[styles.textContent, theme.textContentStyle]}>{selectedItem ? selectedItem.label : placeholderText}</Text>
                 <MaterialCommunityIcons
                     name="chevron-down"
                     size={20}
