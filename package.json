@@ -1,5 +1,5 @@
 {
-  "name": "@febfeb/react-native-dropdown",
+  "name": "@0xaf4/react-native-dropdown",
   "version": "1.0.2",
   "description": "A single pure component for drop-down/combobox in react native",
   "main": "index.js",
@@ -16,7 +16,7 @@
     "dropdown",
     "react-native-dropdown"
   ],
-  "author": "Febrianto Arif Rakhman",
+  "author": "Febrianto Arif Rakhman(Fork)",
   "license": "GPL-3.0-or-later",
   "bugs": {
     "url": "https://github.com/febfeb/react-native-dropdown/issues"
